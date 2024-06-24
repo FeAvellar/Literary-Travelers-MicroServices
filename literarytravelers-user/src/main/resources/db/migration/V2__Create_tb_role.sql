@@ -1,0 +1,4 @@
+CREATE TABLE tb_role (
+    id SERIAL PRIMARY KEY,
+    namerole VARCHAR(255) NOT NULL UNIQUE
+);

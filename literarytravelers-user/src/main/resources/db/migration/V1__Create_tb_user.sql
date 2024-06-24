@@ -1,0 +1,8 @@
+CREATE TABLE tb_user (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    cpf VARCHAR(20) NOT NULL UNIQUE,
+    birth_date DATE NOT NULL 
+);
