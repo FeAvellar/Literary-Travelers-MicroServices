@@ -20,7 +20,7 @@ VALUES (currval('tb_user_id_seq'), 'Brasil', 'DF', 'Brasília', 'Octogonal', 'AO
 -- Aqui você precisa inserir a foto como um valor binário. Se você tiver o arquivo binário da foto, pode usar pg_read_binary_file
 -- Neste exemplo, estou assumindo que você está inserindo uma foto como um valor de texto para ilustração
 INSERT INTO tb_photo (user_id, img)
-VALUES (currval('tb_user_id_seq'), 'base64_encoded_photo_data');
+VALUES (currval('tb_user_id_seq'), 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=');
 
 -- Associa o usuário à role
 INSERT INTO tb_user_roles (user_id, role_id) 
