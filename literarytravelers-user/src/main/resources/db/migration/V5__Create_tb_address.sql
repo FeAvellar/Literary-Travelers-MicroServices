@@ -1,5 +1,5 @@
 CREATE TABLE tb_address (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     country VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,

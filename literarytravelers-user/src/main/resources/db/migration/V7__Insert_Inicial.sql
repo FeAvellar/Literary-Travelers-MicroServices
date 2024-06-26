@@ -5,11 +5,11 @@ INSERT INTO tb_user (username, password, email, cpf, birth_date)
 VALUES ('Fernanda Avellar', '123', 'nanda.fasp@gmail.com', '13976888745', '1991-07-31');
 
 -- Insere uma role
-INSERT INTO tb_role (nameRole) 
+INSERT INTO tb_role (role_name) 
 VALUES ('administrator');
 
 -- Insere um telefone associado ao usuário
-INSERT INTO tb_phone (user_id, phone_number) 
+INSERT INTO tb_phone (user_id, number) 
 VALUES (currval('tb_user_id_seq'), '61998457021');
 
 -- Insere um endereço associado ao usuário
@@ -19,7 +19,7 @@ VALUES (currval('tb_user_id_seq'), 'Brasil', 'DF', 'Brasília', 'Octogonal', 'AO
 -- Insere uma foto associada ao usuário
 -- Aqui você precisa inserir a foto como um valor binário. Se você tiver o arquivo binário da foto, pode usar pg_read_binary_file
 -- Neste exemplo, estou assumindo que você está inserindo uma foto como um valor de texto para ilustração
-INSERT INTO tb_photo (user_id, img_perfil)
+INSERT INTO tb_photo (user_id, img)
 VALUES (currval('tb_user_id_seq'), 'base64_encoded_photo_data');
 
 -- Associa o usuário à role
