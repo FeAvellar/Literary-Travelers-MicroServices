@@ -19,6 +19,7 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    
     private byte[] img;
 
     @OneToOne
