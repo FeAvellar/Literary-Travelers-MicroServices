@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,20 @@ public class UserController {
         User savedUser = userService.saveUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+public ResponseEntity<User> updatedUser(@PathVariable Long id, @RequestBody User user) {
+    if (!id.equals(user.getId())) {
+        return ResponseEntity.badRequest().build(); // Retorna BadRequest se os IDs não coincidirem
+    }
+
+    User updatedUser = userService.updateUser(user);
+    if (updatedUser != null) {
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK); // Retorna o usuário atualizado com status OK (200)
+    } else {
+        return ResponseEntity.notFound().build(); // Retorna NotFound se o usuário com o ID especificado não foi encontrado
+    }
+}
 
     @DeleteMapping("/{id}") //Define um endpoint HTTP DELETE para /user/{id}, usado para excluir um usuário pelo ID.
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
