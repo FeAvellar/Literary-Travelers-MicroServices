@@ -35,7 +35,10 @@ public class User implements UserDetails{
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String username;
+    private String fullname; //Nome completo
+
+    @Column(nullable = false, length = 100)
+    private String loginName;
 
     @Column(nullable = false)
     private String password;
@@ -92,7 +95,10 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true; // Considera que o usuário está sempre ativo
     }
+
+    @Override
+    public String getUsername() {
+       return loginName;
+    }
+
 }
-
-    
-
