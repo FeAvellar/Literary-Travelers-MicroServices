@@ -93,6 +93,15 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-maven-plugin</artifactId>
+    <configuration>
+     <url>jdbc:postgresql://localhost:5432/literarytravelers</url>
+     <user>postgres</user>
+     <password>123456</password>
+    </configuration>
+   </plugin>
 		</plugins>
 	</build>
 
