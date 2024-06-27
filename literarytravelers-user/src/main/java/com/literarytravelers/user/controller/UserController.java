@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE) //Define um endpoint HTTP POST para /user, usado para salvar um novo usuário.
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -56,6 +56,7 @@ public ResponseEntity<User> updatedUser(@PathVariable Long id, @RequestBody User
         return new ResponseEntity<>(updatedUser, HttpStatus.OK); // Retorna o usuário atualizado com status OK (200)
     } else {
         return ResponseEntity.notFound().build(); // Retorna NotFound se o usuário com o ID especificado não foi encontrado
+        
     }
 }
 
