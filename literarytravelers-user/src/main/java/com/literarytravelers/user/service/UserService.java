@@ -5,6 +5,9 @@ import com.literarytravelers.user.entities.User;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface UserService {
 
     public List<User> getAllUsers();
