@@ -43,15 +43,15 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank (message = "{NotBlank.full.name}")
     @Size(max = 255, message = "Name must be less than 255 characters")
     @Pattern(regexp = "^[A-Z]+(.)*", message = "Name must contain only letters and spaces")
     private String fullname; // Nome completo
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Login name is mandatory")
-    @Size(min = 5, max = 50, message = "Login name must be between 5 and 15 characters")
-    @Pattern(regexp = "^[A-Z0-9]+$", message = "O loginname deve conter apenas letras maiúsculas e números")
+    @Size(min = 5, max = 15, message = "{Size.login.name}")
+    @Pattern(regexp = "^[A-Z0-9]+$", message = "{Pattern.user.username}")
     private String loginName;
 
     public void setloginName(String loginName) {
@@ -60,17 +60,18 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @Size(min = 6, message = "{Size.user.password}")
     private String password;
 
     @Column(nullable = false, unique = true)
     @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    @Size(max = 255, message = "Email must be less than 255 characters")
+    @Email(message = "{Email.user.email}")
+    @Size(max = 255, message = "{Size.user.email}")
     private String email;
 
     @Column(nullable = false, unique = true)
-    @CPF(message = "Invalid CPF")
+    @CPF(message = "{Cpf.user.cpf}")
+    @Size(max = 11, message = "{Size.user.cpf}")
     private String cpf;
 
     @Column(nullable = false, unique = false)

@@ -1,8 +1,9 @@
-package com.literarytravelers.user.service.implement;
+package com.literarytravelers.user.services.implement;
 
 import com.literarytravelers.user.entities.User;
-import com.literarytravelers.user.repository.UserRepository;
-import com.literarytravelers.user.service.UserService;
+import com.literarytravelers.user.exceptions.ValidacaoException;
+import com.literarytravelers.user.repositories.UserRepository;
+import com.literarytravelers.user.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class UserServiceImplement implements UserService {
     @Override
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new ValidacaoException("No users found");
+        }
         return users;
     }
 
@@ -41,6 +45,4 @@ public class UserServiceImplement implements UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-
-    
 }

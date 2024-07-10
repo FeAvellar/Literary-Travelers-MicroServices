@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,14 +31,15 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false, unique = true)
     private String roleName; // papel dele no sistema ROLE_SECRETARIO, ROLE_ADM
     
+    @Column(nullable = true)
+    private String description; // nova coluna para a descrição do papel
+
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
     private List<User> users;
 
-
     @Override
-    public String getAuthority() { // retorna o nome do papel, acesso ou
-                                   // autorização exemplo ROLE_GERENTE
+    public String getAuthority() {
         return this.roleName;
     }
 }

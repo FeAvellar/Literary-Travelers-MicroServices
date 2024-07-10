@@ -1,4 +1,4 @@
-package com.literarytravelers.user.repository;
+package com.literarytravelers.user.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
