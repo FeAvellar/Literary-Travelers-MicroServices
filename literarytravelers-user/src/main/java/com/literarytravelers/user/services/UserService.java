@@ -3,7 +3,6 @@ package com.literarytravelers.user.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.literarytravelers.user.dto.UserDTO;
 import com.literarytravelers.user.entities.User;
 
 import jakarta.validation.Valid;
