@@ -70,7 +70,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(nullable = false, unique = true)
-    @CPF(message = "{Cpf.user.cpf}")
+    @CPF(message = "{CPF.user.cpf}")
     @Size(max = 11, message = "{Size.user.cpf}")
     private String cpf;
 

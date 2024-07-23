@@ -4,31 +4,30 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.literarytravelers.user.entities.User;
-import com.literarytravelers.user.exceptions.ValidacaoException;
+import com.literarytravelers.user.exceptions.ApplicationException;
 import com.literarytravelers.user.repositories.UserRepository;
 import com.literarytravelers.user.services.UserService;
 import com.literarytravelers.user.validation.UserValidator;
 
 @Service
 public class UserServiceImplement implements UserService {
+    
 
     @Autowired
     private UserRepository userRepository;
 
-   
-
     @Autowired
     private UserValidator userValidator;
-    
 
     @Override
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            throw new ValidacaoException("Não foram encontrados usuários");
+            throw new ApplicationException("Não foram encontrados usuários", HttpStatus.NOT_FOUND);
         }
         return users;
     }
@@ -45,12 +44,12 @@ public class UserServiceImplement implements UserService {
         return userRepository.save(user);
 
     }
-    
-    @Override
-    public User updateUser(User user) {
 
-        userValidator.validate(user);    
-     return userRepository.save(user);
+    @Override
+    public User updateUser(long l, User user) {
+
+        userValidator.validateUpdate(user);
+        return userRepository.save(user);
     }
 
     @Override

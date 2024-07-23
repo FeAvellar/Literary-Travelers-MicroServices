@@ -21,14 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 import com.literarytravelers.user.entities.User;
-import com.literarytravelers.user.exceptions.ValidacaoException;
+import com.literarytravelers.user.exceptions.ApplicationException;
 import com.literarytravelers.user.services.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class UserController {
         try {
             List<User> userList = userService.getAllUsers();
             return ResponseEntity.ok(userList);
-        } catch (ValidacaoException e) {
+        } catch (ApplicationException e) {
             return ResponseEntity.noContent().build(); // Retorna No Content (204) se não houver usuários
         }
     }
@@ -75,14 +77,20 @@ public class UserController {
         if (!id.equals(user.getId())) {
             return ResponseEntity.badRequest().build(); // Retorna Bad Request (400) se os IDs não coincidirem
         }
-
-        User updatedUser = userService.updateUser(user);
-        return ResponseEntity.ok(updatedUser); // Retorna o usuário atualizado com status OK (200)
+        try {
+            User updatedUser = userService.updateUser(id, user);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedUser); // Retorna o usuário atualizado com status OK (200)
+        } catch (ApplicationException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna Not Found (404) se o usuário não for encontrado
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna Bad Request (400) para outras exceções
+        }
     }
-
+    
     @DeleteMapping("/{id}") // Define um endpoint HTTP DELETE para /user/{id}, usado para excluir um usuário pelo ID.
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build(); // Retorna No Content (204) após excluir o usuário
     }
+
 }
