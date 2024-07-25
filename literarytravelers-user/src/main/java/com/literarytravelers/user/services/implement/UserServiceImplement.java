@@ -17,6 +17,7 @@ import com.literarytravelers.user.validation.UserValidator;
 public class UserServiceImplement implements UserService {
     
 
+   
     @Autowired
     private UserRepository userRepository;
 
@@ -39,16 +40,19 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public User saveUser(User user) {
-
         userValidator.validate(user);
         return userRepository.save(user);
-
     }
 
     @Override
     public User updateUser(long l, User user) {
+        if (!userRepository.existsById(l)) {
+            throw new ApplicationException("Usuário não encontrado", HttpStatus.NOT_FOUND);
+        }
 
         userValidator.validateUpdate(user);
+
+        user.setId(l); //Garanitr que o ID correto seja atualizado
         return userRepository.save(user);
     }
 

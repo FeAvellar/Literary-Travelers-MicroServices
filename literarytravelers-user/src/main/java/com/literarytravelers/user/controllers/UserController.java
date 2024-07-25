@@ -38,14 +38,13 @@ public class UserController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE) // Define um endpoint HTTP GET para /user, que retorna todos os usuários cadastrados.
     public ResponseEntity<List<User>> getAllUsers() {
-        try {
-            List<User> userList = userService.getAllUsers();
-            return ResponseEntity.ok(userList);
-        } catch (ApplicationException e) {
-            return ResponseEntity.noContent().build(); // Retorna No Content (204) se não houver usuários
+        List<User> userList = userService.getAllUsers();
+        if (userList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna Not Found (404) se não houver usuários
         }
+        return ResponseEntity.ok(userList);
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
@@ -53,10 +52,16 @@ public class UserController {
                    .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // Define um endpoint HTTP POST para /user, usado para salvar um novo usuário.
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED); // Retorna Created (201) após salvar o usuário
+        try {
+            User savedUser = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Captura IllegalArgumentException e retorna 400
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Captura outras exceções
+        }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -87,10 +92,13 @@ public class UserController {
         }
     }
     
-    @DeleteMapping("/{id}") // Define um endpoint HTTP DELETE para /user/{id}, usado para excluir um usuário pelo ID.
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build(); // Retorna No Content (204) após excluir o usuário
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build(); // Retorna No Content (204) se a exclusão for bem-sucedida
+        } catch (ApplicationException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna Not Found (404) se o usuário não for encontrado
+        }
     }
-
 }

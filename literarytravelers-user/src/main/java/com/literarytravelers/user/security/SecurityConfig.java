@@ -19,7 +19,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/*").permitAll() // Permite acesso sem autenticação ao endpoint
+                        .requestMatchers("/users/*").permitAll() // Permite acesso sem autenticação ao endpoint
                                                            // /usuario/all
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF

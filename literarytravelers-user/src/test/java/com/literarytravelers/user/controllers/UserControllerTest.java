@@ -3,13 +3,13 @@ package com.literarytravelers.user.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +24,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.literarytravelers.user.dto.UserDTO;
 import com.literarytravelers.user.entities.User;
+import com.literarytravelers.user.exceptions.ApplicationException;
 import com.literarytravelers.user.security.TestSecurityConfig;
 import com.literarytravelers.user.services.UserService;
 
@@ -183,6 +178,41 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Atualizar Usuário - Requisição inválida")
+    @WithMockUser(username = "user", roles = { "USER" })
+    void testUpdateUserBadRequest() {
+        // Mockando o serviço para lançar uma exceção de validação
+        when(userService.updateUser(anyLong(), any())).thenThrow(new IllegalArgumentException("Invalid user data"));
+
+        // Chamando o método do controlador
+        ResponseEntity<User> response = userController.updateUser(1L, user);
+
+        // Verificando se a resposta não é nula
+        assertNotNull(response);
+
+        // Verificando o status da resposta
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Atualizar Usuário - Usuário não encontrado")
+    @WithMockUser(username = "user", roles = { "USER" })
+    void testUpdateUserNotFound() {
+        // Configurando o retorno do serviço para quando o usuário não for encontrado
+        when(userService.updateUser(anyLong(), any())).thenThrow(new ApplicationException("User Not Found", null));
+
+        // Chamando o método do controlador
+        ResponseEntity<User> response = userController.updateUser(1L, user);
+
+        // Verificando se a resposta não é nula
+        assertNotNull(response);
+
+        // Verificando o status da resposta
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+
+    @Test
     @DisplayName("Deletar Usuário com sucesso")
     @WithMockUser(username = "user", roles = { "USER" })
     void whenDelete_ThenReturnSuccess() {
@@ -214,62 +244,57 @@ public class UserControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    
     @Test
-    @DisplayName("Atualizar Usuários - Não encontra o usuário")
+    @DisplayName("Cadastrar Usuário - Requisição inválida")
     @WithMockUser(username = "user", roles = { "USER" })
-    void testUpdateUserNotFound() {
-        when(userService.getUserById(anyLong())).thenReturn(Optional.empty());
+    void testSaveUserBadRequest() {
+        // Mockando o serviço para lançar uma exceção de validação
+        when(userService.saveUser(any())).thenThrow(new IllegalArgumentException("Invalid user data"));
 
-        ResponseEntity<User> response = userController.updateUser(1L, user);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("Cadastrar Usuário - Solicitação feita de forma errada")
-    @WithMockUser(username = "user", roles = { "USER" })
-    void testSaveUserBadRequest() throws Exception {
-        when(userService.saveUser(any(User.class))).thenReturn(null);
-
+        // Chamando o método do controlador
         ResponseEntity<User> response = userController.saveUser(user);
 
+        // Verificando se a resposta não é nula
         assertNotNull(response);
+
+        // Verificando o status da resposta
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    @DisplayName("Listar Usuários - Solicitação feita de forma errada")
+    @DisplayName("Listar todos os usuários - Nenhum usuário encontrado")
+    @WithMockUser(username = "user", roles = { "USER" })
     void testGetAllUsersNotFound() {
-        when(userService.getAllUsers()).thenReturn(null);
+        // Mockando o serviço para retornar uma lista vazia
+        when(userService.getAllUsers()).thenReturn(List.of());
 
+        // Chamando o método do controlador
         ResponseEntity<List<User>> response = userController.getAllUsers();
 
+        // Verificando se a resposta não é nula
         assertNotNull(response);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-    }
 
-    @Test
-    @DisplayName("Atualizar Usuário - Solicitação feita de forma errada")
-    @WithMockUser(username = "user", roles = { "USER" })
-    void testUpdateUserBadRequest() throws Exception {
-        when(userService.updateUser(anyLong(), any(User.class))).thenReturn(null);
-
-        ResponseEntity<User> response = userController.updateUser(user.getId(), user);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("Deletar Usuário - Não encontra o usuário")
-    @WithMockUser(username = "user", roles = { "USER" })
-    void testDeleteUserNotFound() {
-        when(userService.getUserById(anyLong())).thenReturn(Optional.empty());
-
-        ResponseEntity<Void> response = userController.deleteUser(1L);
-
-        assertNotNull(response);
+        // Verificando o status da resposta
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    @Test
+    @DisplayName("Deletar Usuário - Usuário não encontrado")
+    @WithMockUser(username = "user", roles = { "USER" })
+    void testDeleteUserNotFound() {
+        // Configurando o serviço para lançar ApplicationException quando o usuário não for encontrado
+        doThrow(new ApplicationException("User not Found", null)).when(userService).deleteUser(anyLong());
+    
+        // Chamando o método do controlador
+        ResponseEntity<Void> response = userController.deleteUser(1L);
+    
+        // Verificando se a resposta não é nula
+        assertNotNull(response);
+    
+        // Verificando o status da resposta
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
 }
+
