@@ -1,5 +1,5 @@
 
-# Literary Travelers MicroServices
+# Literary Travelers
 
 ## **Visão Geral**
 O **Literary Travelers MicroServices** é um sistema RESTful desenvolvido em Java com Spring Boot e Hibernate. 
