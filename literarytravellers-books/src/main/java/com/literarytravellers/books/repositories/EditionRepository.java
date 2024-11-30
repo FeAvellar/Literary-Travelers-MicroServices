@@ -1,10 +1,12 @@
-package com.literarytravelers.book.repository;
+package com.literarytravellers.books.repositories;
 
-import com.literarytravelers.book.entities.Edition;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.literarytravellers.books.entities.Edition;
 
 @Repository
 public interface EditionRepository extends JpaRepository<Edition, Long> {
@@ -20,4 +22,6 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
 
     // Buscar edições por editor
     List<Edition> findByPublisherContainingIgnoreCase(String publisher);
+
+    boolean existsByIsbn10OrIsbn13(String isbn10, String isbn13);
 }

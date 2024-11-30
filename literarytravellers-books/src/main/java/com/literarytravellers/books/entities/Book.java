@@ -54,30 +54,27 @@ public class Book {
      * Autores do livro.
      */
     @ManyToMany
-    @JoinTable( //As tabelas serão geradas automaticamente pelo JPA
-        name = "book_author",
-        joinColumns = @JoinColumn(name = "book_id"),
-        inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
+    @JoinTable( // As tabelas serão geradas automaticamente pelo JPA
+            name = "book_author", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors;
 
     /**
      * Categorias do livro.
      */
     @ManyToMany
-    @JoinTable( //As tabelas serão geradas automaticamente pelo JPA
-        name = "book_category",
-        joinColumns = @JoinColumn(name = "book_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @JoinTable( // As tabelas serão geradas automaticamente pelo JPA
+            name = "book_category", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
     /**
      * Edições do livro.
      */
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true) //O uso de CascadeType.ALL está correto se você quiser que as edições sejam criadas, atualizadas ou removidas automaticamente junto com o livro.
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true) // O uso de CascadeType.ALL está
+                                                                                   // correto se você quiser que as
+                                                                                   // edições sejam criadas, atualizadas
+                                                                                   // ou removidas automaticamente junto
+                                                                                   // com o livro.
     @JsonManagedReference
     private List<Edition> edition;
-    
-}
 
+}

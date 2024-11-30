@@ -1,4 +1,4 @@
- 
+
 package com.literarytravelers.user.exceptions;
 
 import org.springframework.http.HttpStatus;
