@@ -10,7 +10,7 @@ import java.util.List;
  * Essa entidade representa uma categoria de livros.
  */
 @Entity
-@Table(name = "tb_category")
+@Table(name = "tb_categories")
 @Data // simplifica getters, setters, toString, etc.
 public class Category {
 
@@ -32,4 +32,7 @@ public class Category {
      */
     @ManyToMany(mappedBy = "categories")
     private List<Book> books;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Author> authors;
 }

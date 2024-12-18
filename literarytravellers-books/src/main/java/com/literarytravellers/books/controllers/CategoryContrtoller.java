@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.literarytravellers.books.entities.Category;
@@ -36,6 +37,11 @@ public class CategoryContrtoller {
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Category>> getCategoriesByAuthor(@RequestParam String authorName) {
+        return ResponseEntity.ok(categoryService.getCategoriesByAuthor(authorName));
     }
 
     @PutMapping("/{id}")

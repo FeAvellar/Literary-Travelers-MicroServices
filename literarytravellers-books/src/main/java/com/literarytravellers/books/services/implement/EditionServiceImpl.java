@@ -2,6 +2,7 @@ package com.literarytravellers.books.services.implement;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.literarytravellers.books.entities.Edition;
@@ -10,6 +11,8 @@ import com.literarytravellers.books.services.EditionService;
 
 @Service
 public class EditionServiceImpl implements EditionService {
+
+    @Autowired
     private final EditionRepository editionRepository;
 
     public EditionServiceImpl(EditionRepository editionRepository) {

@@ -8,7 +8,7 @@ public interface BookService {
 
     Book createBook(Book book);
 
-    Book updateBook(Book book);
+    Book updateBook(Long id, Book book);
 
     Book getBookById(Long id);
 
@@ -25,5 +25,6 @@ public interface BookService {
     public List<Book> getBooksByCategory(String category);
 
     public List<Book> getBooksByEdition(String edition);
+
 
 }

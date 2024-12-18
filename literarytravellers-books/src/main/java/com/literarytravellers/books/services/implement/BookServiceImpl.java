@@ -2,14 +2,19 @@ package com.literarytravellers.books.services.implement;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.literarytravellers.books.entities.Book;
+import com.literarytravellers.books.exceptions.ApplicationException;
 import com.literarytravellers.books.repositories.BookRepository;
 import com.literarytravellers.books.services.BookService;
 
 @Service
 public class BookServiceImpl implements BookService {
+
+    @Autowired
     private BookRepository bookRepository;
 
     public BookServiceImpl(BookRepository bookRepository) {
@@ -22,25 +27,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBook(Book book) {
-        Book existingBook = bookRepository.findById(book.getId())
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado com id: " + book.getId()));
-        existingBook.setTitle(book.getTitle());
-        existingBook.setDescription(book.getDescription());
-        existingBook.setAuthors(book.getAuthors());
-        existingBook.setCategories(book.getCategories());
-        return bookRepository.save(existingBook);
+    public Book updateBook(Long id, Book book) {
+        if (!bookRepository.existsById(id)) {
+            throw new ApplicationException(HttpStatus.NOT_FOUND, "Livro não encontrado com o ID: " + id);
+        }
+        book.setId(id);
+        return bookRepository.save(book);
     }
 
     @Override
     public Book getBookById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND,"Livro não encontrado"));
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
+        if (books.isEmpty()) {
+            throw new ApplicationException(HttpStatus.NOT_FOUND, "Nenhum livro encontrado.");
+        }
+        return books;
     }
 
     @Override
@@ -72,6 +79,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new ApplicationException(HttpStatus.NOT_FOUND, "Livro não encontrado");
+        }
         bookRepository.deleteById(id);
     }
 

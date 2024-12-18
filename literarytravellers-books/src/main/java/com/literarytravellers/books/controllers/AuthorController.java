@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.literarytravellers.books.entities.Author;
@@ -48,5 +49,17 @@ public class AuthorController {
         authorService.deleteAuthorById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<Author>> getAuthorsByPublisher(@RequestParam String publisher) {
+        return ResponseEntity.ok(authorService.getAuthorsByPublisher(publisher));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Author>> getAuthorsByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(authorService.getAuthorsByCategory(category));
+    }
+
+
 
 }

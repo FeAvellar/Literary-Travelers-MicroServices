@@ -3,6 +3,7 @@ package com.literarytravellers.books.services.implement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.literarytravellers.books.entities.Book;
@@ -12,6 +13,8 @@ import com.literarytravellers.books.services.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     
@@ -55,4 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
     return books;
 }  
+
+public List<Category> getCategoriesByAuthor(String authorName) {
+    return categoryRepository.findByAuthorNameContainingIgnoreCase(authorName);
+}
 }

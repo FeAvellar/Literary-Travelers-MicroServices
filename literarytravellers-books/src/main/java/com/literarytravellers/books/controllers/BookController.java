@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.literarytravellers.books.entities.Book;
@@ -62,6 +63,11 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+     @GetMapping("/by-edition")
+    public ResponseEntity<List<Book>> getBooksByEdition(@RequestParam String edition) {
+        return ResponseEntity.ok(bookService.getBooksByEdition(edition));
+    }
+
     /**
      * Atualiza um livro.
      * 
@@ -71,7 +77,7 @@ public class BookController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        Book updatedBook = bookService.updateBook(book);
+        Book updatedBook = bookService.updateBook(id, book);
         return ResponseEntity.ok(updatedBook);
     }
 

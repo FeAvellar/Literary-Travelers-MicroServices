@@ -2,6 +2,7 @@ package com.literarytravellers.books.services;
 
 import java.util.List;
 
+import com.literarytravellers.books.entities.Author;
 import com.literarytravellers.books.entities.Book;
 import com.literarytravellers.books.entities.Category;
 
@@ -15,6 +16,8 @@ public interface CategoryService {
 
     // Operações adicionais
     List<Book> getBooksByCategory(String categoryName);
+    public List<Category> getCategoriesByAuthor(String authorName);
+    
 
     
 

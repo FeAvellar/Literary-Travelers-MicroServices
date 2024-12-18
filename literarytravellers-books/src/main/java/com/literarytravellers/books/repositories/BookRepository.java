@@ -2,6 +2,8 @@ package com.literarytravellers.books.repositories;
 
 import com.literarytravellers.books.entities.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +27,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByCategoriesNameContainingIgnoreCase(String categoryName);
 
     // busca livros cuja edição contém a string fornecida.
-    List<Book> findByEditionContainingIgnoreCase(String edition);
+    // Realiza a busca no campo `edition.edition` da entidade Edition
+    @Query("SELECT b FROM Book b JOIN b.edition e WHERE LOWER(e.edition) LIKE LOWER(CONCAT('%', :edition, '%'))")
+    List<Book> findByEditionContainingIgnoreCase(@Param("edition") String edition);
 
     // busca livros cuja editora contém a string fornecida.
     List<Book> findByPublisherContainingIgnoreCase(String publisher);
