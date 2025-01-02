@@ -58,7 +58,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByEdition(String edition) {
 
-        return bookRepository.findByEditionContainingIgnoreCase(edition);
+        return bookRepository.findByEditionNumberContainingIgnoreCase(edition);
     }
 
     @Override

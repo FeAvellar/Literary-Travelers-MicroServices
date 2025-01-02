@@ -39,7 +39,7 @@ public class EditionServiceImpl implements EditionService {
             .orElseThrow(() -> new RuntimeException("Edition not found with id: " + id));
 
         // Atualiza os campos permitidos
-        existingEdition.setEdition(edition.getEdition());
+        existingEdition.setEditionNumber(edition.getEditionNumber());
         existingEdition.setPublisher(edition.getPublisher());
         existingEdition.setIsbn10(edition.getIsbn10());
         existingEdition.setIsbn13(edition.getIsbn13());

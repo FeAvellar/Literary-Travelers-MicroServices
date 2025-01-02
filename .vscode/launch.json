@@ -9,6 +9,16 @@
             "projectName": "literarytravelers-user",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-LiterarytravellersBooksApplication<literarytravellers-books>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.literarytravellers.books.LiterarytravellersBooksApplication",
+            "projectName": "literarytravellers-books",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

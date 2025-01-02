@@ -107,7 +107,7 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/literarytravelers</url>
+                    <url>jdbc:postgresql://localhost:5432/literarytravelers_users</url>
                     <user>postgres</user>
                     <password>123456</password>
                 </configuration>

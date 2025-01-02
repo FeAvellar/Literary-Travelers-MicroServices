@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-
 import com.literarytravellers.books.entities.Author;
 import com.literarytravellers.books.entities.Book;
 import com.literarytravellers.books.entities.Category;
@@ -24,7 +23,9 @@ public class BookValidator {
         validateTitle(book.getTitle());
         validateAuthorsList(book.getAuthors());
         validateCategoryList(book.getCategories());
-        validateEditions(book.getEdition());
+        List<Edition> editions = book.getEditions();
+        validateEditions(editions);
+        
     }
 
     public void validateTitle(String title) {
@@ -49,9 +50,12 @@ public class BookValidator {
         if (editions == null || editions.isEmpty()) {
             throw new ApplicationException(HttpStatus.NOT_ACCEPTABLE, "O livro deve ter pelo menos uma edição associada.");
         }
-
+    
         // Delegar a validação de cada edição ao EditionValidator
         for (Edition edition : editions) {
+            if (edition == null) {
+                throw new ApplicationException(HttpStatus.NOT_ACCEPTABLE, "Nenhuma edição pode estar nula.");
+            }
             editionValidator.validate(edition);
         }
     }

@@ -48,4 +48,5 @@ public class EditionController {
         editionService.deleteEdition(id);
         return ResponseEntity.noContent().build();
     }
+
 }

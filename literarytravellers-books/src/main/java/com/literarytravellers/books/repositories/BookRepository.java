@@ -26,11 +26,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // busca livros cuja categoria contém a string fornecida.
     List<Book> findByCategoriesNameContainingIgnoreCase(String categoryName);
 
-    // busca livros cuja edição contém a string fornecida.
-    // Realiza a busca no campo `edition.edition` da entidade Edition
-    @Query("SELECT b FROM Book b JOIN b.edition e WHERE LOWER(e.edition) LIKE LOWER(CONCAT('%', :edition, '%'))")
-    List<Book> findByEditionContainingIgnoreCase(@Param("edition") String edition);
+    // busca livros cuja edição contém a string fornecida, ignorando maiúsculas e minúsculas.
+    @Query("SELECT b FROM Book b JOIN b.editions ed WHERE LOWER(ed.editionNumber) LIKE LOWER(CONCAT('%', :editionNumber, '%'))")
+    List<Book> findByEditionNumberContainingIgnoreCase(@Param("editionNumber") String editionNumber);
 
     // busca livros cuja editora contém a string fornecida.
-    List<Book> findByPublisherContainingIgnoreCase(String publisher);
+    @Query("SELECT b FROM Book b JOIN b.editions e WHERE LOWER(e.publisher) LIKE LOWER(CONCAT('%', :publisher, '%'))")
+    List<Book> findByPublisherContainingIgnoreCase(@Param("publisher") String publisher);
+
 }

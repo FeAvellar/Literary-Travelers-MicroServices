@@ -3,6 +3,7 @@ package com.literarytravellers.books.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +14,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -34,18 +38,22 @@ public class Author {
      * Nome do autor
      */
     @Column(nullable = false, length = 100)
+    @NotBlank(message = "O nome do autor é obrigatório.")
+    @Size(max = 100, message = "O nome do autor deve ter no máximo 100 caracteres.")
     private String name;
 
     /**
      * Data de nascimento do autor
      */
-    @Column(nullable = false)
+    @Column(nullable = true)
+    @PastOrPresent(message = "A data de nascimento deve estar no passado ou presente.")
     private LocalDate birthDate;
 
     /**
      * Data da morte do autor, caso tenha ocorrido
      */
     @Column(nullable = true)
+    @PastOrPresent(message = "A data de falecimento deve estar no passado ou presente.")
     private LocalDate deathDate;
 
     /**
@@ -61,16 +69,10 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 
-    @OneToMany(mappedBy = "author")
-    private List<Edition> editions; // Relacionamento com a tabela Editions
-
     @ManyToMany
-    @JoinTable(
-        name = "author_category",
-        joinColumns = @JoinColumn(name = "author_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @JoinTable(name = "author_category", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
+
+    @ManyToMany(mappedBy = "authors")
+    private List<Edition> editions;// Relacionamento com a tabela Editions
 }
-
-

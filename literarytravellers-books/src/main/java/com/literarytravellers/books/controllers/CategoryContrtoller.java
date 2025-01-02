@@ -34,12 +34,12 @@ public class CategoryContrtoller {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @GetMapping
+    @GetMapping("/by-author")
     public ResponseEntity<List<Category>> getCategoriesByAuthor(@RequestParam String authorName) {
         return ResponseEntity.ok(categoryService.getCategoriesByAuthor(authorName));
     }

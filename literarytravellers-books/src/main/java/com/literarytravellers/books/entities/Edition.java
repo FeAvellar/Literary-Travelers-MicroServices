@@ -1,6 +1,7 @@
 package com.literarytravellers.books.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -10,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -32,10 +35,10 @@ public class Edition {
     /**
      * Edição do livro
      * 
-     * @Size(max = 255, message = "Ediition must be less than 255 characters")
+     * @Size(max = 100, message = "Ediition must be less than 100 characters")
      */
     @Column(nullable = false, length = 100)
-    private String edition;
+    private String editionNumber;
 
     /**
      * Editora do livro
@@ -96,6 +99,11 @@ public class Edition {
     @JoinColumn(name = "book_id", nullable = false)
     @JsonBackReference
     private Book book;
+
+    @ManyToMany
+    @JoinTable(name = "edition_author", // Nome da tabela de junção
+            joinColumns = @JoinColumn(name = "edition_id"), // Coluna referente à entidade Edition
+            inverseJoinColumns = @JoinColumn(name = "author_id") // Coluna referente à entidade Author
+    )
+    private List<Author> authors;
 }
-
-

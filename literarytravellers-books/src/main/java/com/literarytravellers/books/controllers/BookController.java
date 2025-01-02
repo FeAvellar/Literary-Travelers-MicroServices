@@ -3,6 +3,7 @@ package com.literarytravellers.books.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,6 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
-
 
     /**
      * Cria um novo livro.
@@ -57,13 +57,13 @@ public class BookController {
      * 
      * @return lista de livros.
      */
-    @GetMapping
+    @GetMapping (value = "/", produces = MediaType.APPLICATION_JSON_VALUE) // Define um endpoint HTTP GET para /books, que retorna todos os usuários cadastrados.
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> books = bookService.getAllBooks();
         return ResponseEntity.ok(books);
     }
 
-     @GetMapping("/by-edition")
+    @GetMapping("/by-edition")
     public ResponseEntity<List<Book>> getBooksByEdition(@RequestParam String edition) {
         return ResponseEntity.ok(bookService.getBooksByEdition(edition));
     }
@@ -71,7 +71,7 @@ public class BookController {
     /**
      * Atualiza um livro.
      * 
-     * @param id ID do livro.
+     * @param id   ID do livro.
      * @param book dados do livro.
      * @return livro atualizado.
      */
@@ -92,5 +92,10 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-}
+    @GetMapping("/easter-egg")
+    public ResponseEntity<String> easterEgg() {
+        return ResponseEntity.ok(
+                "✨ Parabéns, Viajante Literário(a)! Você desbloqueou um segredo! Continue explorando histórias e criando mundos. 🚀📚");
+    }
 
+}

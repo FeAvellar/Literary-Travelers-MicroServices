@@ -34,7 +34,7 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.getAuthorById(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Author>> getAllAuthors() {
         return ResponseEntity.ok(authorService.getAllAuthors());
     }
@@ -50,12 +50,12 @@ public class AuthorController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/by-publisher")
     public ResponseEntity<List<Author>> getAuthorsByPublisher(@RequestParam String publisher) {
         return ResponseEntity.ok(authorService.getAuthorsByPublisher(publisher));
     }
 
-    @GetMapping
+    @GetMapping("/by-category")
     public ResponseEntity<List<Author>> getAuthorsByCategory(@RequestParam String category) {
         return ResponseEntity.ok(authorService.getAuthorsByCategory(category));
     }
